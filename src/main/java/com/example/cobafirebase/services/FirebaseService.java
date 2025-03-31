@@ -4,7 +4,6 @@ package com.example.cobafirebase.services;
 import com.example.cobafirebase.dto.UserRequest;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,6 +50,7 @@ public class FirebaseService {
         // Ambil ID terbesar dari nama dokumen Firestore
         long newUserId = getNextUserId();
         try {
+            
             Map<String, Object> data = Map.of(
                 "id", newUserId,
                 "userName", userRequest.getUserName(),
@@ -116,6 +116,24 @@ public class FirebaseService {
         } catch (InterruptedException | ExecutionException e) {
             logger.error("Gagal mengambil userId terbesar", e);
             return 1; // Jika gagal, mulai dari 1
+        }
+    }
+    public String authenticateUser(String usernameOrEmail, String password) {
+        try {
+            Query query = db.collection("users")
+                .whereEqualTo("email", usernameOrEmail)
+                .whereEqualTo("password", password);
+    
+            QuerySnapshot querySnapshot = query.get().get();
+    
+            if (!querySnapshot.isEmpty()) {
+                return "Login berhasil";
+            } else {
+                return "Email atau password salah";
+            }
+        } catch (Exception e) {
+            logger.error("Gagal melakukan autentikasi", e);
+            return "Gagal melakukan autentikasi";
         }
     }
 }

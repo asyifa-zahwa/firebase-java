@@ -2,13 +2,11 @@ package com.example.cobafirebase.services;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class OtpService {
@@ -25,6 +23,7 @@ public class OtpService {
 
     //  Kirim OTP dan simpan ke Firestore
     public String sendOtp(String email) {
+        
         String otp = emailService.generateOtp();
 
         Map<String, Object> otpData = new HashMap<>();
